@@ -2,15 +2,35 @@
   <head>
     <style>
       body {
+        margin: 0;
         width: 100vw;
         height: 100vh;
         background-color: aquamarine;
+        display: flex;
+        flex-direction: column;
+      }
+
+      body,
+      input,
+      button {
+        font-size: 30px;
       }
 
       .tile {
-        width: 400px;
-        height: 400px;
+        width: 100%;
+        height: 100%;
         background-color: bisque;
+        font-size: 100px;
+        font-weight: bold;
+      }
+
+      #tiles {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        @media (max-width: 1000px) {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
     <script>
@@ -20,6 +40,8 @@
       let numPlayers = -1;
       let initial = -1;
       let increment = -1;
+
+      let interval = -1;
 
       function format(n) {
         return `${n < 0 ? "-" : ""}${Math.floor(Math.abs(n) / 60)
@@ -33,11 +55,13 @@
         initial = Number(document.querySelector("#time_initial").value);
         increment = Number(document.querySelector("#time_increment").value);
         times = Array.from({ length: numPlayers }).fill(initial);
+        clearInterval(interval);
+        document.querySelector("#tiles").innerHTML = "";
 
         Array.from({ length: numPlayers }).forEach((_, index) => {
           let node = document.createElement("button");
           node.innerText = format(times[index]);
-          document.body.appendChild(node);
+          document.querySelector("#tiles").appendChild(node);
           node.className = "tile";
           node.onclick = function () {
             if (index === curPlayer) {
@@ -48,12 +72,11 @@
           };
         });
 
-        setInterval(() => {
+        interval = setInterval(() => {
           times[curPlayer] -= 1;
           document.querySelectorAll(".tile")[curPlayer].innerText = format(
             times[curPlayer]
           );
-          console.log(times);
         }, 1000);
       }
     </script>
@@ -75,5 +98,6 @@
 
       <button onclick="startTimer()">Start</button>
     </div>
+    <div id="tiles"></div>
   </body>
 </html>

@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <style>
+      body {
+        width: 100vw;
+        height: 100vh;
+        background-color: aquamarine;
+      }
+
+      .tile {
+        width: 40px;
+        height: 40px;
+        background-color: bisque;
+      }
+    </style>
+    <script>
+      function startTimer() {
+        // console.log("startTimer");
+        let num = 3; // TODO: document.querySelector("#num_players");
+        // console.log(num);
+        Array.from({ length: num }).forEach((_, index) => {
+          let node = document.createElement("button");
+          node.innerText = String(index);
+          document.body.appendChild(node);
+          node.className = "tile";
+          node.onclick = function () {
+            console.log("clicked", index);
+          };
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <label for="num_players">Number of players</label>
+    <input id="num_players" />
+    <button onclick="startTimer()">Start</button>
+  </body>
+</html>

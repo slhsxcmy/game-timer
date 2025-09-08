@@ -8,31 +8,65 @@
       }
 
       .tile {
-        width: 40px;
-        height: 40px;
+        width: 400px;
+        height: 400px;
         background-color: bisque;
       }
     </style>
     <script>
+      let times = [];
+      let curPlayer = -1;
+
+      let numPlayers = Number(document.querySelector("#num_players").value);
+      let initial = Number(document.querySelector("#time_initial").value);
+      let increment = Number(document.querySelector("#time_increment").value);
+
+      function format(n) {
+        return `${Math.floor(n / 60)
+          .toFixed(0)
+          .padStart(2, "0")}:${String(Math.abs(n % 60)).padStart(2, "0")}`;
+      }
       function startTimer() {
-        // console.log("startTimer");
-        let num = 3; // TODO: document.querySelector("#num_players");
-        // console.log(num);
-        Array.from({ length: num }).forEach((_, index) => {
+        times = Array.from({ length: numPlayers }).fill(initial);
+        curPlayer = 0;
+
+        Array.from({ length: numPlayers }).forEach((_, index) => {
           let node = document.createElement("button");
-          node.innerText = String(index);
+          node.innerText = format(times[index]);
           document.body.appendChild(node);
           node.className = "tile";
           node.onclick = function () {
-            console.log("clicked", index);
+            times[index] += increment;
+            node.innerText = format(times[index]);
+            curPlayer = (index + 1) % numPlayers;
           };
         });
+
+        setInterval(() => {
+          times[curPlayer] -= 1;
+          document.querySelectorAll(".tile")[curPlayer].innerText = format(
+            times[curPlayer]
+          );
+        }, 1000);
       }
     </script>
   </head>
   <body>
-    <label for="num_players">Number of players</label>
-    <input id="num_players" />
-    <button onclick="startTimer()">Start</button>
+    <div>
+      <div>
+        <label for="num_players">Number of players</label>
+        <input id="num_players" type="number" value="3" />
+      </div>
+      <div>
+        <label for="time_initial">Initial time in seconds</label>
+        <input id="time_initial" type="number" value="1800" />
+      </div>
+      <div>
+        <label for="time_increment">Increment in seconds</label>
+        <input id="time_increment" type="number" value="60" />
+      </div>
+
+      <button onclick="startTimer()">Start</button>
+    </div>
   </body>
 </html>

@@ -16,7 +16,8 @@
         font-size: 30px;
       }
 
-      .tile {
+      .tile1,
+      .tile2 {
         width: 100%;
         height: 100%;
         background-color: bisque;
@@ -28,13 +29,13 @@
         flex: 1;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        @media (max-width: 1000px) {
+        /* @media (max-width: 1000px) {
           grid-template-columns: 1fr;
-        }
+        } */
       }
     </style>
     <script>
-      let times = [];
+      let time = [];
       let curPlayer = -1;
 
       let numPlayers = -1;
@@ -52,30 +53,40 @@
       function startTimer() {
         curPlayer = 0;
         numPlayers = Number(document.querySelector("#num_players").value);
-        initial = Number(document.querySelector("#time_initial").value);
-        increment = Number(document.querySelector("#time_increment").value);
-        times = Array.from({ length: numPlayers }).fill(initial);
+        initial = Number(document.querySelector("#seconds_initial").value);
+        increment = Number(document.querySelector("#seconds_increment").value);
+        time = Array.from({ length: numPlayers }).fill(initial);
         clearInterval(interval);
         document.querySelector("#tiles").innerHTML = "";
 
         Array.from({ length: numPlayers }).forEach((_, index) => {
-          let node = document.createElement("button");
-          node.innerText = format(times[index]);
-          document.querySelector("#tiles").appendChild(node);
-          node.className = "tile";
-          node.onclick = function () {
+          let node1 = document.createElement("button");
+          node1.innerText = format(time[index]);
+          document.querySelector("#tiles").appendChild(node1);
+          node1.className = "tile1";
+          node1.onclick = function () {
             if (index === curPlayer) {
-              times[index] += increment;
-              node.innerText = format(times[index]);
+              time[index] += increment;
+              node1.innerText = format(time[index]);
               curPlayer = (index + 1) % numPlayers;
+            }
+          };
+          let node2 = document.createElement("button");
+          node2.innerText = "Increment only";
+          document.querySelector("#tiles").appendChild(node2);
+          node2.className = "tile2";
+          node2.onclick = function () {
+            if (index === curPlayer) {
+              time[index] += increment;
+              node1.innerText = format(time[index]);
             }
           };
         });
 
         interval = setInterval(() => {
-          times[curPlayer] -= 1;
-          document.querySelectorAll(".tile")[curPlayer].innerText = format(
-            times[curPlayer]
+          time[curPlayer] -= 1;
+          document.querySelectorAll(".tile1")[curPlayer].innerText = format(
+            time[curPlayer]
           );
         }, 1000);
       }
@@ -88,12 +99,12 @@
         <input id="num_players" type="number" value="3" />
       </div>
       <div>
-        <label for="time_initial">Initial time in seconds</label>
-        <input id="time_initial" type="number" value="1800" />
+        <label for="seconds_initial">Initial time</label>
+        <input id="seconds_initial" type="number" value="1800" />
       </div>
       <div>
-        <label for="time_increment">Increment in seconds</label>
-        <input id="time_increment" type="number" value="60" />
+        <label for="seconds_increment">Increment in seconds</label>
+        <input id="seconds_increment" type="number" value="60" />
       </div>
 
       <button onclick="startTimer()">Start</button>

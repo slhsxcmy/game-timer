@@ -53,8 +53,12 @@
       function startTimer() {
         curPlayer = 0;
         numPlayers = Number(document.querySelector("#num_players").value);
-        initial = Number(document.querySelector("#seconds_initial").value);
-        increment = Number(document.querySelector("#seconds_increment").value);
+        initial =
+          60 * Number(document.querySelector("#minutes_initial").value) +
+          Number(document.querySelector("#seconds_initial").value);
+        increment =
+          60 * Number(document.querySelector("#minutes_increment").value) +
+          Number(document.querySelector("#seconds_increment").value);
         time = Array.from({ length: numPlayers }).fill(initial);
         clearInterval(interval);
         document.querySelector("#tiles").innerHTML = "";
@@ -99,12 +103,14 @@
         <input id="num_players" type="number" value="3" />
       </div>
       <div>
-        <label for="seconds_initial">Initial time</label>
-        <input id="seconds_initial" type="number" value="1800" />
+        <label>Initial</label>
+        <input id="minutes_initial" type="number" value="4" />
+        <input id="seconds_initial" type="number" value="0" />
       </div>
       <div>
-        <label for="seconds_increment">Increment in seconds</label>
-        <input id="seconds_increment" type="number" value="60" />
+        <label>Increment</label>
+        <input id="minutes_increment" type="number" value="1" />
+        <input id="seconds_increment" type="number" value="30" />
       </div>
 
       <button onclick="startTimer()">Start</button>
